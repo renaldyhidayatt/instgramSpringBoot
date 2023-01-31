@@ -3,6 +3,8 @@ package com.sanedge.instagramclone.repository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,4 +23,9 @@ public interface PhotoRepository extends JpaRepository<Photo, Long> {
     @Query("SELECT p FROM Photo p LEFT JOIN FETCH p.uploadedBy u LEFT JOIN FETCH p.getLikes l LEFT JOIN FETCH p.getComments c WHERE p.id = :id ORDER BY c.createdAt DESC")
     Optional<Photo> findByIdWithUploaderAndLikesAndRecentComments(@Param("id") Long id);
 
+    @Query("SELECT p FROM Photo p WHERE p.uploadedBy.id IN :array ORDER BY p.createdAt DESC")
+    Page<Photo> findAllByUserIdIn(@Param("array") List<Long> array, Pageable pageable);
+
+    @Query(value = "SELECT p FROM Photo p WHERE p.user_id IN :array ORDER BY p.createdAt DESC")
+    Page<Photo> findAll(Pageable pageable, @Param("array") List<Long> array);
 }
