@@ -18,9 +18,10 @@ import com.sanedge.instagramclone.models.User;
 import com.sanedge.instagramclone.repository.UserRepository;
 import com.sanedge.instagramclone.security.JwtProvider;
 import com.sanedge.instagramclone.security.UserDetail;
+import com.sanedge.instagramclone.service.AuthService;
 
 @Service
-public class AuthImplService {
+public class AuthImplService implements AuthService {
     private UserRepository userRepository;
     private AuthenticationManager authenticationManager;
     private PasswordEncoder passwordEncoder;
@@ -35,6 +36,7 @@ public class AuthImplService {
         this.jwtProvider = jwtProvider;
     }
 
+    @Override
     public MessageResponse loginUser(AuthRequest authRequest) {
         Authentication authentication = this.authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
@@ -55,6 +57,7 @@ public class AuthImplService {
         return MessageResponse.builder().message("Berhasil login").data(authResponse).statusCode(200).build();
     }
 
+    @Override
     public MessageResponse register(RegisterRequest register) {
         User user = new User();
         user.setName(register.getName());

@@ -11,9 +11,10 @@ import com.sanedge.instagramclone.models.Photo;
 import com.sanedge.instagramclone.models.User;
 import com.sanedge.instagramclone.repository.CommentRepository;
 import com.sanedge.instagramclone.repository.PhotoRepository;
+import com.sanedge.instagramclone.service.CommentService;
 
 @Service
-public class CommentImplService {
+public class CommentImplService implements CommentService {
     private CommentRepository commentRepository;
     private PhotoRepository photoRepository;
     private UserImplService userImplService;
@@ -26,6 +27,7 @@ public class CommentImplService {
         this.userImplService = userImplService;
     }
 
+    @Override
     public MessageResponse create(CommentRequest commentRequest, Long photoId) {
         User user = this.userImplService.getCurrentUser();
 
@@ -42,6 +44,7 @@ public class CommentImplService {
         return MessageResponse.builder().message("berhasil membuat comment").data(comment).statusCode(200).build();
     }
 
+    @Override
     public MessageResponse updateComment(Long id, CommentRequest commentRequest) {
         Comment comment = this.commentRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("not found comment"));
@@ -52,6 +55,7 @@ public class CommentImplService {
         return MessageResponse.builder().message("berhasil update comment").data(comment).statusCode(200).build();
     }
 
+    @Override
     public MessageResponse deleteComment(Long id) {
         Comment comment = this.commentRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("not found comment"));

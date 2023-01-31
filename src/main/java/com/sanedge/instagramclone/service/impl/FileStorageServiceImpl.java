@@ -16,8 +16,10 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.sanedge.instagramclone.service.FileStorageService;
+
 @Service
-public class FileStorageServiceImpl {
+public class FileStorageServiceImpl implements FileStorageService {
     @Value("${app.file.storage.mapping}")
     private String uploadPath;
 

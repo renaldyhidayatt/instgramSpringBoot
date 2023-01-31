@@ -23,9 +23,10 @@ import com.sanedge.instagramclone.models.User;
 import com.sanedge.instagramclone.repository.FollowRepository;
 import com.sanedge.instagramclone.repository.PhotoRepository;
 import com.sanedge.instagramclone.repository.UserRepository;
+import com.sanedge.instagramclone.service.UserService;
 
 @Service
-public class UserImplService {
+public class UserImplService implements UserService {
     private UserRepository userRepository;
     private PhotoRepository photoRepository;
     private FollowRepository followRepository;
@@ -45,6 +46,7 @@ public class UserImplService {
     }
 
     @Transactional
+    @Override
     public User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -54,6 +56,7 @@ public class UserImplService {
 
     }
 
+    @Override
     public MessageResponse getUserProfile(String username, Integer page, Integer pageSize) {
         User user = this.userRepository.findByUsername(username)
                 .orElseThrow(() -> new NotFoundException("User not found"));
@@ -78,6 +81,7 @@ public class UserImplService {
         return MessageResponse.builder().message("Berhasil mendapatkan data").data(response).statusCode(200).build();
     }
 
+    @Override
     public MessageResponse updateUser(UserUpdateRequest userUpdateRequest) {
         User user = this.getCurrentUser();
 
@@ -93,6 +97,7 @@ public class UserImplService {
                 .build();
     }
 
+    @Override
     public MessageResponse updateUserAvatar(MultipartFile file) {
         User getCurrentUser = this.getCurrentUser();
         String filename = this.fileStorageServiceImpl.storeFile(file);
@@ -105,6 +110,7 @@ public class UserImplService {
                 .build();
     }
 
+    @Override
     public MessageResponse updateUserPassword(ForgotPasswordRequest request) {
         User user = this.getCurrentUser();
 

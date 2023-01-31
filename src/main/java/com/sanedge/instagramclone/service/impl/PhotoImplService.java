@@ -15,9 +15,10 @@ import com.sanedge.instagramclone.models.Photo;
 import com.sanedge.instagramclone.models.User;
 import com.sanedge.instagramclone.repository.LikeRepository;
 import com.sanedge.instagramclone.repository.PhotoRepository;
+import com.sanedge.instagramclone.service.PhotoService;
 
 @Service
-public class PhotoImplService {
+public class PhotoImplService implements PhotoService {
 
     private PhotoRepository photoRepository;
     private FileStorageServiceImpl fileStorageServiceImpl;
@@ -33,6 +34,7 @@ public class PhotoImplService {
         this.likeRepository = likeRepository;
     }
 
+    @Override
     public MessageResponse findById(Long id) {
         Photo photo = this.photoRepository.findByIdWithLikesAndCommentsCount(id)
                 .orElseThrow(() -> new NotFoundException("photo tersebut  tidak ada"));
@@ -58,6 +60,7 @@ public class PhotoImplService {
         return MessageResponse.builder().message("Berhasil mendapatkan data").data(response).statusCode(200).build();
     }
 
+    @Override
     public MessageResponse uploadPhoto(PhotoRequest photoRequest, MultipartFile file) {
         User getCurrentUser = this.userImplService.getCurrentUser();
         String filename = this.fileStorageServiceImpl.storeFile(file);
@@ -97,6 +100,7 @@ public class PhotoImplService {
         return MessageResponse.builder().message("Berhasil membuat data").data(response).statusCode(200).build();
     }
 
+    @Override
     public MessageResponse deleteById(Long id) {
         Photo photo = this.photoRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("photo tidak ditemukan"));

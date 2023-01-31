@@ -7,9 +7,10 @@ import org.springframework.stereotype.Service;
 import com.sanedge.instagramclone.dto.response.MessageResponse;
 import com.sanedge.instagramclone.models.User;
 import com.sanedge.instagramclone.repository.UserRepository;
+import com.sanedge.instagramclone.service.SearchService;
 
 @Service
-public class SearchImplService {
+public class SearchImplService implements SearchService {
     private UserRepository userRepository;
 
     @Autowired
@@ -17,6 +18,7 @@ public class SearchImplService {
         this.userRepository = userRepository;
     }
 
+    @Override
     public MessageResponse searchUser(String term) {
         if (term.isEmpty()) {
             return MessageResponse.builder().message("yang dicari kosong").build();

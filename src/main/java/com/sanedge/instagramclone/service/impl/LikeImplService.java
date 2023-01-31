@@ -10,9 +10,10 @@ import com.sanedge.instagramclone.models.Photo;
 import com.sanedge.instagramclone.models.User;
 import com.sanedge.instagramclone.repository.LikeRepository;
 import com.sanedge.instagramclone.repository.PhotoRepository;
+import com.sanedge.instagramclone.service.LikeService;
 
 @Service
-public class LikeImplService {
+public class LikeImplService implements LikeService {
     private LikeRepository likeRepository;
     private PhotoRepository photoRepository;
     private UserImplService userImplService;
@@ -25,6 +26,7 @@ public class LikeImplService {
         this.photoRepository = photoRepository;
     }
 
+    @Override
     public MessageResponse create(Long photoId) {
         User user = this.userImplService.getCurrentUser();
         Photo photo = this.photoRepository.findById(photoId)
