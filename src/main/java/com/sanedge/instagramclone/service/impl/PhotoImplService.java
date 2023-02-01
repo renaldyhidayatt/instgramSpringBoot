@@ -36,7 +36,7 @@ public class PhotoImplService implements PhotoService {
 
     @Override
     public MessageResponse findById(Long id) {
-        Photo photo = this.photoRepository.findByIdWithLikesAndCommentsCount(id)
+        Photo photo = this.photoRepository.findByIdWithLikesAndComments(id)
                 .orElseThrow(() -> new NotFoundException("photo tersebut  tidak ada"));
 
         boolean isAuthor = false;
